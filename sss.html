@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+ 
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css">
+  
+        <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+      
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+        <!-- google icons -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+</head>
+<body>
+    <div id="container">
+        <div class="editable" contenteditable="true">Editable div 1</div>
+        <div class="editable" contenteditable="true">Editable div 2</div>
+        <div class="editable" contenteditable="true">Editable div 3</div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Attach click event listener to editable divs
+            $('.editable').on('click', function (e) {
+                console.log(e.target);
+                // Get the position of the clicked div
+                var position = $(this).offset();
+                console.log(position);
+
+                // Create a new div for the Summer note text editor
+                var editor = $('<div class="editor"></div>');
+
+                // Initialize the Summernote text editor on the new div
+                editor.summernote({
+                    callbacks: {
+                        onChange: function (contents) {
+                            // Update the content of the clicked div with the Summernote editor contents
+                            $('.editable.active').html(contents);
+                        }
+                    }
+                });
+
+                // Set the contents of the Summernote editor to the contents of the clicked div
+                editor.summernote('code', $(this).html());
+
+                // Position the Summernote editor above the clicked div
+                editor.offset({
+                    top: position.top - editor.outerHeight(),
+                    left: position.left
+                });
+
+                // Add the active class to the clicked div
+                $(this).addClass('active');
+
+                // Append the Summernote editor to the body
+                $('body').append(editor);
+            });
+
+            // Attach blur event listener to the Summernote editor
+            $(document).on('blur', '.editor', function () {
+                // Remove the active class from the clicked div
+                $('.editable.active').removeClass('active');
+
+                // Destroy the Summernote editor
+                $(this).summernote('destroy');
+
+                // Remove the Summernote editor from the body
+                $(this).remove();
+            });
+        });
+    </script>
+
+</body>
+</html>
